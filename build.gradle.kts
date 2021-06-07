@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.trankimtung.spring"
-version = "0.0.1-A1"
+version = "0.0.1-A2"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -108,8 +108,9 @@ repositories {
 
 dependencies {
     api("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    api("org.jetbrains.kotlin:kotlin-reflect")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    api("com.fasterxml.jackson.core:jackson-annotations")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("com.h2database:h2")
 }

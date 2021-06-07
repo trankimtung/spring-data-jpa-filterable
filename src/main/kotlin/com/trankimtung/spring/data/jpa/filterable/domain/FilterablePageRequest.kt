@@ -1,5 +1,7 @@
 package com.trankimtung.spring.data.jpa.filterable.domain
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -20,12 +22,18 @@ class FilterablePageRequest(
      *
      * @param page zero-based page index, must not be negative. Default 0.
      * @param size the size of the page to be returned, must be greater than 0. Default 50.
-     * @param sort sort option, default unsorted.
+     * @param orders order options, default unsorted.
      * @param filters list of [Filter], default empty.
      */
-    constructor(page: Int?, size: Int?, sort: Sort?, filters: List<FilterImpl>?) : this(
+    @JsonCreator
+    constructor(
+        @JsonProperty("page") page: Int?,
+        @JsonProperty("size") size: Int?,
+        @JsonProperty("orders") orders: List<OrderImpl>?,
+        @JsonProperty("filters") filters: List<FilterImpl>?
+    ) : this(
         pageable = PageRequest.of(page ?: DEFAULT_PAGE, size ?: DEFAULT_SIZE)
-            .withSort(sort ?: Sort.unsorted()),
+            .withSort(if (orders != null) Sort.by(orders.map { it.asSpringOrder() }) else Sort.unsorted()),
         filters = filters ?: emptyList()
     )
 
