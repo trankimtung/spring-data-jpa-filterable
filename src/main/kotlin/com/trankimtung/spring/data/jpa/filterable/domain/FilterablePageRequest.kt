@@ -32,8 +32,11 @@ class FilterablePageRequest(
         @JsonProperty("orders") orders: List<OrderImpl>?,
         @JsonProperty("filters") filters: List<FilterImpl>?
     ) : this(
-        pageable = PageRequest.of(page ?: DEFAULT_PAGE, size ?: DEFAULT_SIZE)
-            .withSort(if (orders != null) Sort.by(orders.map { it.asSpringOrder() }) else Sort.unsorted()),
+        pageable = PageRequest.of(
+            page ?: DEFAULT_PAGE,
+            size ?: DEFAULT_SIZE,
+            if (orders != null) Sort.by(orders.map { it.asSpringOrder() }) else Sort.unsorted()
+        ),
         filters = filters ?: emptyList()
     )
 
