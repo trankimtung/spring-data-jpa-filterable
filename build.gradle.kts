@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.trankimtung.spring"
-version = "0.0.1-A2"
+version = "0.0.1-A3"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
