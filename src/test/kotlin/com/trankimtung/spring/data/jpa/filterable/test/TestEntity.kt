@@ -12,5 +12,8 @@ class TestEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
 
-    var value: String? = null
+    var string: String = ""
+    var int: Int = 0
+    var double: Double = 0.0
+    var enum: TestEnum = TestEnum.VALUE1
 }

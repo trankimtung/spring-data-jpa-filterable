@@ -25,7 +25,7 @@ interface Filter {
     /**
      * Desired values. Only applicable for [Operator.IN] and [Operator.NOT_IN].
      */
-    val values: List<Any>?
+    val values: List<Any?>?
 }
 
 /**

@@ -1,8 +1,8 @@
 package com.trankimtung.spring.data.jpa.filterable.repository
 
-import com.trankimtung.spring.data.jpa.filterable.repository.support.SpecificationGenerator
 import com.trankimtung.spring.data.jpa.filterable.domain.Filter
 import com.trankimtung.spring.data.jpa.filterable.domain.FilterablePageable
+import com.trankimtung.spring.data.jpa.filterable.repository.support.SpecificationGenerator
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

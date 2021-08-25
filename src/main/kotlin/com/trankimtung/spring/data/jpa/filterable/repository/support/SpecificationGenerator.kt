@@ -1,8 +1,10 @@
 package com.trankimtung.spring.data.jpa.filterable.repository.support
 
 import com.trankimtung.spring.data.jpa.filterable.domain.Filter
+import com.trankimtung.spring.data.jpa.filterable.domain.FilterImpl
 import com.trankimtung.spring.data.jpa.filterable.domain.Operator
 import com.trankimtung.spring.data.jpa.filterable.domain.asString
+import com.trankimtung.spring.data.jpa.filterable.util.Reflects
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification
@@ -10,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmErasure
 
 /**
  * [Specification] generator for [Filter].
@@ -33,7 +36,7 @@ class SpecificationGenerator {
          * @return never null.
          */
         @JvmStatic
-        fun <T : Any> with(filters: List<Filter>, type: Class<T>, relaxed: Boolean = true): Specification<T> =
+        fun <T : Any> with(filters: List<Filter>, type: Class<T>, relaxed: Boolean): Specification<T> =
             with(filters, type.kotlin, relaxed)
 
         /**
@@ -45,7 +48,7 @@ class SpecificationGenerator {
          * @return never null.
          */
         @JvmStatic
-        fun <T : Any> with(filters: List<Filter>, type: KClass<T>, relaxed: Boolean = true): Specification<T> {
+        fun <T : Any> with(filters: List<Filter>, type: KClass<T>, relaxed: Boolean): Specification<T> {
             logger.debug("Generating specification, relaxed = {}.", relaxed)
             var relaxedFilters = filters
             if (relaxed) {
@@ -53,7 +56,7 @@ class SpecificationGenerator {
                     type.members.any { member -> member.name == filter.name }
                 }
             }
-            return with(relaxedFilters)
+            return with(relaxedFilters, type)
         }
 
         /**
@@ -63,10 +66,14 @@ class SpecificationGenerator {
          * @return never null.
          */
         @JvmStatic
-        fun <T : Any> with(filters: List<Filter>): Specification<T> {
+        fun <T : Any> with(filters: List<Filter>, type: KClass<T>? = null): Specification<T> {
             return Specification { root, _, criteriaBuilder ->
-                val predicates = filters.map { filter ->
+                val predicates = filters.map {
+                    var filter = it
                     logger.debug("Filter: {}", filter.asString())
+                    if (type != null) {
+                        filter = castFilter(type, it)
+                    }
                     when (filter.operator) {
                         Operator.EQUAL -> equalPredicate(filter, root, criteriaBuilder)
                         Operator.NOT -> notPredicate(filter, root, criteriaBuilder)
@@ -81,6 +88,20 @@ class SpecificationGenerator {
                     }
                 }
                 criteriaBuilder.and(*predicates.toTypedArray())
+            }
+        }
+
+        private fun <T : Any> castFilter(type: KClass<T>, filter: Filter): Filter {
+            val member = Reflects.findMember(type, filter.name)
+            return if (member == null) {
+                filter
+            } else {
+                FilterImpl(
+                    name = filter.name,
+                    operator = filter.operator,
+                    value = resolveValue(filter.value, member.returnType.jvmErasure),
+                    values = filter.values?.map { resolveValue(it, member.returnType.jvmErasure) }
+                )
             }
         }
 

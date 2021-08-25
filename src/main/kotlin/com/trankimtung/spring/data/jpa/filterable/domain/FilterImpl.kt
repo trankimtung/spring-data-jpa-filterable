@@ -10,5 +10,5 @@ class FilterImpl @JsonCreator constructor(
     @JsonProperty("name") override val name: String,
     @JsonProperty("operator") override val operator: Operator,
     @JsonProperty("value") override val value: Any?,
-    @JsonProperty("values") override val values: List<Any>?
+    @JsonProperty("values") override val values: List<Any?>?
 ) : Filter

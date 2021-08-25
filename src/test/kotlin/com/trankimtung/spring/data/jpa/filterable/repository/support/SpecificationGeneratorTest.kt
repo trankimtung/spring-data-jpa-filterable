@@ -26,7 +26,7 @@ internal class SpecificationGeneratorTest @Autowired constructor(
                 override val values: List<Any>? = null
             },
             object : Filter {
-                override val name: String = "value"
+                override val name: String = "string"
                 override val operator: Operator = Operator.EQUAL
                 override val value: Any? = null
                 override val values: List<Any>? = null
@@ -74,6 +74,22 @@ internal class SpecificationGeneratorTest @Autowired constructor(
                 override val operator: Operator = Operator.EQUAL
                 override val value: Any? = null
                 override val values: List<Any>? = null
+            }
+        )
+        val spec = SpecificationGenerator.with(filters, TestEntity::class.java, true)
+        assertDoesNotThrow {
+            testEntityRepo.findAll(spec)
+        }
+    }
+
+    @Test
+    fun `Type incompatible`() {
+        val filters = listOf(
+            object : Filter {
+                override val name: String = "int"
+                override val operator: Operator = Operator.EQUAL
+                override val value: Double = 1.0
+                override val values: List<Double>? = null
             }
         )
         val spec = SpecificationGenerator.with(filters, TestEntity::class.java, true)
