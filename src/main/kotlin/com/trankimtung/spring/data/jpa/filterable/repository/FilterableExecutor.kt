@@ -13,6 +13,7 @@ import kotlin.reflect.KClass
 /**
  * Interface to allow execution of [Filter] based on [JpaSpecificationExecutor].
  */
+@Suppress("unused")
 interface FilterableExecutor<T : Any> : JpaSpecificationExecutor<T> {
 
     /**
@@ -192,7 +193,7 @@ interface FilterableExecutor<T : Any> : JpaSpecificationExecutor<T> {
      * @return number of found entities, never null.
      */
     fun count(filters: List<Filter>, type: KClass<T>, relaxed: Boolean): Long {
-        val spec = SpecificationGenerator.with<T>(filters)
+        val spec = SpecificationGenerator.with(filters, type, relaxed)
         return count(spec)
     }
 

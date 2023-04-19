@@ -8,9 +8,9 @@ import com.trankimtung.spring.data.jpa.filterable.util.Reflects
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.Predicate
-import javax.persistence.criteria.Root
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Root
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
 
