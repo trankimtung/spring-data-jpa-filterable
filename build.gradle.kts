@@ -1,18 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.5.0"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.5.10"
-    kotlin("plugin.spring") version "1.5.10"
-    kotlin("plugin.jpa") version "1.5.10"
+    id("org.springframework.boot") version "3.0.5"
+    id("io.spring.dependency-management") version "1.1.0"
+    kotlin("jvm") version "1.7.22"
+    kotlin("plugin.spring") version "1.7.22"
+    kotlin("plugin.jpa") version "1.7.22"
+    kotlin("plugin.allopen") version "1.7.22"
     signing
     `maven-publish`
 }
 
 group = "com.trankimtung.spring"
 version = "0.0.1-A4"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    mavenCentral()
+}
 
 configurations {
     compileOnly {
@@ -23,7 +28,7 @@ configurations {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -110,10 +115,10 @@ repositories {
 }
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
-    api("org.jetbrains.kotlin:kotlin-reflect")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    api("com.fasterxml.jackson.core:jackson-annotations")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.fasterxml.jackson.core:jackson-annotations")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("com.h2database:h2")
 }
